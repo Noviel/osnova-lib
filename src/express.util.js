@@ -1,6 +1,6 @@
 // Created by snov on 18.09.2016.
 
-module.exports = exports = {
+export default {
   emptyMiddleware (req, res, next) {
     next();
   },

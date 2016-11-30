@@ -1,8 +1,11 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 // Created by snov on 18.09.2016.
 
-module.exports = exports = {
+exports.default = {
   emptyMiddleware: function emptyMiddleware(req, res, next) {
     next();
   },

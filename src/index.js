@@ -1,10 +1,12 @@
 // Created by snov on 30.11.2016.
 
-import * as core from './core';
-import * as express from './express.util';
+import * as _core from './core';
+import _express from './express.util';
 
-const lib = {
-  core, express
+const library = {
+  core: _core,
+  express: _express
 };
 
-export default lib;
+export default library;
+export const core = _core, express = _express;
