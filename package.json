@@ -1,7 +1,7 @@
 {
   "author": "Sasha snov Noviel",
   "dependencies": {},
-  "description": "Authentication routine for OSNOVA",
+  "description": "The very basic helper functions for work with client and server javascript",
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
@@ -24,5 +24,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "npm run build && node test/index.js"
   },
-  "version": "1.0.2"
+  "version": "1.0.3"
 }

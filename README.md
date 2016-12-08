@@ -1,6 +1,6 @@
 **osnova-lib**
 
-The very basic helper functions for work with javascript, express, e.t.c
+The very basic helper functions for work with client and server javascript.
 
 ##Install
 
