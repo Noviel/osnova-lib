@@ -6,25 +6,34 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-exports.isArray = isArray;
 exports.isObject = isObject;
+exports.isArray = isArray;
 exports.isFunction = isFunction;
 exports.defaults = defaults;
-exports.defaultsMergeArrays = defaultsMergeArrays;
+exports.defaultsMA = defaultsMA;
 exports.defaultsMultiple = defaultsMultiple;
-exports.sleep = sleep;
+exports.defaultsMultipleMA = defaultsMultipleMA;
+exports.cif = cif;
 // Created by snov on 27.08.2016.
 
-function isArray(obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+var tagObj = '[object Object]',
+    tagArr = '[object Array]',
+    typeObj = 'object';
+
+var objToStr = function objToStr(o) {
+  return Object.prototype.toString.call(o);
+};
+
+function isObject(o) {
+  return o != null && (typeof o === 'undefined' ? 'undefined' : _typeof(o)) == typeObj;
 }
 
-function isObject(obj) {
-  return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object';
+function isArray(o) {
+  return (typeof o === 'undefined' ? 'undefined' : _typeof(o)) == 'object' && objToStr(o) == tagArr;
 }
 
-function isFunction(obj) {
-  return typeof obj === 'function';
+function isFunction(o) {
+  return typeof o == 'function';
 }
 
 function defaults(dst, src) {
@@ -33,20 +42,18 @@ function defaults(dst, src) {
 
   for (var j in src) {
     if (src.hasOwnProperty(j)) {
-      if (isObject(src[j])) {
+      if (isObject(dst[j]) && isObject(src[j])) {
         dst[j] = defaults(dst[j], src[j]);
       }
 
-      if (dst[j] === undefined) {
-        dst[j] = src[j];
-      }
+      if (dst[j] === undefined) dst[j] = src[j];
     }
   }
 
   return dst;
 }
 
-function defaultsMergeArrays(dst, src) {
+function defaultsMA(dst, src) {
   if (!src) return dst;
   if (!dst) dst = {};
 
@@ -76,18 +83,23 @@ function defaultsMultiple(dst) {
     src[_key - 1] = arguments[_key];
   }
 
-  for (var i = 0, len = src.length; i < len; i++) {
+  for (var i = 0; i < src.length; i++) {
     dst = defaults(dst, src[i]);
   }
   return dst;
 }
 
-function sleep(time, callback) {
-  var stop = new Date().getTime();
-  while (new Date().getTime() < stop + time) {
-    ;
+function defaultsMultipleMA(dst) {
+  for (var _len2 = arguments.length, src = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    src[_key2 - 1] = arguments[_key2];
   }
-  if (typeof callback === 'function') {
-    callback();
+
+  for (var i = 0; i < src.length; i++) {
+    dst = defaultsMA(dst, src[i]);
   }
+  return dst;
+}
+
+function cif(input) {
+  return isFunction(input) ? input() : input;
 }

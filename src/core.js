@@ -1,15 +1,23 @@
 // Created by snov on 27.08.2016.
 
-export function isArray (obj) {
-  return (Object.prototype.toString.call(obj) === '[object Array]');
+const tagObj = '[object Object]',
+      tagArr = '[object Array]',
+      typeObj = 'object';
+
+const objToStr = (o) => {
+  return Object.prototype.toString.call(o);
+};
+
+export function isObject (o) {
+  return o != null && typeof o == typeObj;
 }
 
-export function isObject (obj) {
-  return (typeof obj === 'object');
+export function isArray (o) {
+  return typeof o == 'object' && objToStr(o) == tagArr;
 }
 
-export function isFunction (obj) {
-  return (typeof obj === 'function');
+export function isFunction (o) {
+  return typeof o == 'function';
 }
 
 export function defaults(dst, src) {
@@ -18,18 +26,19 @@ export function defaults(dst, src) {
 
   for (let j in src) {
     if (src.hasOwnProperty(j)) {
-      if (isObject(src[j])) {
+      if (isObject(dst[j]) && isObject(src[j])) {
         dst[j] = defaults(dst[j], src[j]);
       }
 
-      if (dst[j] === undefined) { dst[j] = src[j]; }
+      if (dst[j] === undefined)
+        dst[j] = src[j];
     }
   }
 
   return dst;
 }
 
-export function defaultsMergeArrays(dst, src) {
+export function defaultsMA(dst, src) {
   if (!src) return dst;
   if (!dst) dst = {};
 
@@ -53,18 +62,19 @@ export function defaultsMergeArrays(dst, src) {
 }
 
 export function defaultsMultiple(dst, ...src) {
-  for (let i = 0, len = src.length; i < len; i++) {
+  for (let i = 0; i < src.length; i++) {
     dst = defaults(dst, src[i]);
   }
   return dst;
 }
 
-export function sleep(time, callback) {
-  const stop = new Date().getTime();
-  while(new Date().getTime() < stop + time) {
-      ;
+export function defaultsMultipleMA(dst, ...src) {
+  for (let i = 0; i < src.length; i++) {
+    dst = defaultsMA(dst, src[i]);
   }
-  if (typeof callback === 'function') {
-    callback();
-  }
+  return dst;
+}
+
+export function cif(input) {
+  return isFunction(input) ? input() : input;
 }
