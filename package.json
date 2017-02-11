@@ -3,7 +3,7 @@
   "dependencies": {
     "clone": "^2.1.0"
   },
-  "description": "The very basic helper functions for work with client and server javascript",
+  "description": "The very basic helper functions for work with javascript",
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
@@ -32,5 +32,5 @@
     "test": "npm run build && mocha __test__/test.js",
     "prepublish": "npm run build"
   },
-  "version": "2.0.1"
+  "version": "2.0.2"
 }
