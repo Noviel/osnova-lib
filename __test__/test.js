@@ -2,12 +2,28 @@
 
 const { defaults } = require('../build/index');
 
-const assert = require('assert');
+const dst = {
+  a: 1,
+  b: true,
+  c: {
+    sub: 'sub',
+    opps: {
+      lul: 'lul'
+    }
+  }
+};
 
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
-    });
-  });
-});
+const def = {
+  x: 666,
+  b: {
+    val: 'i will never surrender'
+  },
+  c: {
+    sub: 'def sub',
+    opps: {
+      hops: 'yay!'
+    }
+  }
+};
+
+console.log(defaults(dst, def, false));

@@ -1,8 +1,11 @@
 // Created by snov on 27.08.2016.
+const clone = require('clone');
 
 const tagObj = '[object Object]',
       tagArr = '[object Array]',
-      typeObj = 'object';
+      typeObj = 'object',
+      typeFunction = 'function',
+      typeUndefined = 'undefined';
 
 const objToStr = (o) => {
   return Object.prototype.toString.call(o);
@@ -13,29 +16,29 @@ export function isObject (o) {
 }
 
 export function isArray (o) {
-  return typeof o == 'object' && objToStr(o) == tagArr;
+  return typeof o == typeObj && objToStr(o) == tagArr;
 }
 
 export function isFunction (o) {
-  return typeof o == 'function';
+  return typeof o == typeFunction;
 }
 
-export function defaults(dst, src) {
-  if (!src) return dst;
-  if (!dst) dst = {};
+export function isUndefined (o) {
+  return typeof o == typeUndefined;
+}
 
-  for (let j in src) {
-    if (src.hasOwnProperty(j)) {
-      if (isObject(dst[j]) && isObject(src[j])) {
-        dst[j] = defaults(dst[j], src[j]);
-      }
+export function defaults(opts, def, deep = true) {
+  opts = opts || {};
 
-      if (dst[j] === undefined)
-        dst[j] = src[j];
-    }
-  }
+  Object.keys(def).forEach(function(key) {
+    if (deep && isObject(opts[key]) && isObject(def[key]))
+      opts[key]= defaults(opts[key], def[key]);
 
-  return dst;
+    if (isUndefined(opts[key]))
+      opts[key] = clone(def[key]);
+  });
+
+  return opts;
 }
 
 export function defaultsMA(dst, src) {
@@ -51,7 +54,7 @@ export function defaultsMA(dst, src) {
           dst[j] = [].concat(src[j]);
         }
       } else if (isObject(src[j])) {
-        dst[j] = defaultsMergeArrays(dst[j], src[j]);
+        dst[j] = defaultsMA(dst[j], src[j]);
       }
 
       if (dst[j] === undefined) { dst[j] = src[j]; }
@@ -59,22 +62,4 @@ export function defaultsMA(dst, src) {
   }
 
   return dst;
-}
-
-export function defaultsMultiple(dst, ...src) {
-  for (let i = 0; i < src.length; i++) {
-    dst = defaults(dst, src[i]);
-  }
-  return dst;
-}
-
-export function defaultsMultipleMA(dst, ...src) {
-  for (let i = 0; i < src.length; i++) {
-    dst = defaultsMA(dst, src[i]);
-  }
-  return dst;
-}
-
-export function cif(input) {
-  return isFunction(input) ? input() : input;
 }
